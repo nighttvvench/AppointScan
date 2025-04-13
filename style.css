@@ -1,0 +1,194 @@
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Background image for the whole page */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('CIT-U_GLE_Building_01.original.png');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
+
+/* Header Section */
+header {
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+    padding: 20px 0;
+    text-align: center;
+    width: 100%;
+}
+
+/* Title Styling */
+.main-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #000000;
+    text-shadow: 1px 1px 4px rgba(255, 255, 255, 0.5);
+    margin-bottom: 10px;
+}
+
+/* Subtitle Styling */
+header p {
+    font-size: 1.1rem;
+    font-weight: normal;
+    margin-top: 5px;
+    color: #000000;
+}
+
+
+.card {
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent white */
+    width: 1080%;
+    max-width: 500px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.card-body {
+    padding: 30px;
+}
+
+.card-title {
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+/* Simplified Form Fields */
+.form-control {
+    height: 10px; /* Regular height for input fields */
+    padding: 10px;
+    font-size: 1.2rem;
+    border: 1px solid #ccc; /* Light border color */
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+/* Add spacing between form fields */
+.mb-3 {
+    margin-bottom: 20px; /* Space below each input field */
+}
+
+/* Focus on form fields */
+.form-control:focus {
+    border-color: #030303fd; /* Change border color on focus */
+    outline: none;
+}
+
+button.btn-primary {
+    border-radius: 5px;
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    background-color: #d47f43;
+    border: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+button.btn-primary:hover {
+    background-color: #005bb5;
+}
+
+
+.custom-btn {
+    background-color: #000000;  /* Black background */
+    color: #fff;  /* White text color */
+    border: 2px solid #000000;  /* Black border */
+    border-radius: 30px;  /* Soft rounded corners */
+    padding: 14px 40px;  /* Larger padding for a more prominent button */
+    font-size: 1.1rem;  /* Slightly smaller font size */
+    font-weight: 600;  /* Semi-bold text */
+    text-transform: uppercase;  /* Uppercase text for a professional look */
+    letter-spacing: 1px;  /* Slightly increased letter-spacing for modern feel */
+    transition: all 0.3s ease;  /* Smooth transition for all effects */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+}
+
+.custom-btn:hover {
+    background-color: #333333;  /* Darker gray on hover */
+    color: #fff;  /* Ensure text remains white on hover */
+    border-color: #333333;  /* Border changes to match hover color */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);  /* Slightly stronger shadow on hover */
+    transform: translateY(-4px);  /* Lift the button on hover for depth */
+}
+
+.custom-btn:focus {
+    outline: none;  /* Remove default focus outline */
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.3);  /* Add a prominent shadow on focus for accessibility */
+}
+
+.custom-btn:active {
+    background-color: #222222;  /* Darker color when the button is pressed */
+    transform: translateY(2px);  /* Slight push effect when clicked */
+}
+
+
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 5px 0;
+    font-size: 1rem;
+    text-align: center;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+    margin-top: auto; /* Pushes the footer to the bottom */
+}
+.navbar-brand {
+    font-family: 'Arial', sans-serif; /* Choose your desired font */
+    font-size: 2.5rem; /* Larger font size for title effect */
+    font-weight: bold; /* Make it bold for emphasis */
+    color: #000000; /* White color for text */
+    letter-spacing: 2px; /* Add letter spacing for a title feel */
+    text-transform: uppercase; /* Make text uppercase for a more formal look */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3); /* Subtle shadow to make it stand out */
+}
+
+/* Optional: Change color on hover */
+.navbar-brand:hover {
+    color: #0072ff;  /* Change text color when hovered */
+}
+
+/* Navbar Styles */
+.navbar .navbar-nav {
+    margin-left: 0; /* Ensures no margin pushing items to the right */
+}
+
+.navbar .navbar-brand {
+    margin-left: 0; /* Ensures the brand is aligned left */
+}
+
+.navbar-nav {
+    flex-direction: row;  /* Ensures the nav items stay in a row */
+}
+
+/* Responsive Design */
+@media (max-width: 767px) {
+    header h1 {
+        font-size: 2rem;
+    }
+    header p {
+        font-size: 1rem;
+    }
+}
+
+button.btn-lg {
+    padding: 16px 20px;
+}
