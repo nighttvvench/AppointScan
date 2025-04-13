@@ -12,45 +12,78 @@
             margin: 0;
             padding: 0;
         }
+        
         body {
-            background-image: url('CIT-U_GLE_Building_01.original.png');
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.2), 
+                rgba(0, 0, 0, 0.2)),
+                url('CIT-U_GLE_Building_01.original.png') no-repeat center center fixed;
             background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+
+        /* Transparent navbar */
+        .navbar {
+            background-color: transparent !important;
+            box-shadow: none;
+            border-bottom: none;
+            padding: 15px 0;
+        }
+
+        /* Logo styling */
+        .navbar img {
+            background-color: transparent !important;
+            filter: drop-shadow(0 0 3px rgba(0,0,0,0.5));
+        }
+
         .container-wrapper {
             flex: 1;
             display: flex;
             flex-direction: column;
         }
+
         .card {
             border-radius: 5px;
-            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+            background-color: rgba(255, 255, 255, 0.93);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
+
         .admin-link {
             position: fixed;
             bottom: 20px;
             right: 20px;
             z-index: 1000;
         }
+
         footer {
             flex-shrink: 0;
+            background-color: rgba(0, 0, 0, 0.7) !important;
+            backdrop-filter: blur(2px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
-        footer.bg-dark {
-            background-color: rgba(0, 0, 0, 0.8) !important; /* Semi-transparent black */
+
+        /* Form input styling */
+        .form-control {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Button styling */
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
         }
     </style>
 </head>
 <body>
     <div class="container-wrapper">
-        <!-- Navigation Bar -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <!-- Transparent Navigation Bar -->
+        <nav class="navbar navbar-expand-lg">
             <div class="container-fluid">
-                <img src="rnlogo.png" width="150" height="100" class="me-2">
+                <img src="rnlogo-1.png" width="150" height="100" class="me-2" alt="CIT-U Logo">
             </div>
         </nav>
 
@@ -92,13 +125,13 @@
             </div>
         </section>
 
-        <!-- Hidden Admin Link (remove in production) -->
+        <!-- Hidden Admin Link -->
         <a href="admin.html" class="btn btn-danger admin-link rounded-circle p-3" title="Admin Portal">
             <i class="bi bi-shield-lock fs-4"></i>
         </a>
 
         <!-- Footer -->
-        <footer class="bg-dark text-white text-center py-3">
+        <footer class="text-white text-center py-3">
             <p>&copy; 2025 CIT-U Appointment Site | All Rights Reserved</p>
         </footer>
     </div>
