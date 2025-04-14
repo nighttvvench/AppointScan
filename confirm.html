@@ -71,6 +71,7 @@
                     <!-- Appointment Details -->
                     <div class="mb-4 text-start">
                         <h5 class="text-center mb-3">Appointment Details</h5>
+                        <p><strong>Student Number:</strong> <span id="appointment-student-number"></span></p>
                         <p><strong>Name:</strong> <span id="appointment-name"></span></p>
                         <p><strong>Email:</strong> <span id="appointment-email"></span></p>
                         <p><strong>Phone:</strong> <span id="appointment-phone"></span></p>
@@ -104,6 +105,7 @@
 <!-- JavaScript to display the saved appointment data -->
 <script>
     // Retrieve the stored data from localStorage
+    document.getElementById("appointment-student-number").textContent = localStorage.getItem("appointmentStudentNumber");
     document.getElementById("appointment-name").textContent = localStorage.getItem("appointmentName");
     document.getElementById("appointment-email").textContent = localStorage.getItem("appointmentEmail");
     document.getElementById("appointment-phone").textContent = localStorage.getItem("appointmentPhone");
