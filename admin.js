@@ -17,6 +17,7 @@ function loadAppointments() {
         row.className = 'appointment-row';
         row.innerHTML = `
             <td>${index + 1}</td>
+            <td>${appointment.studentNumber}</td
             <td>${appointment.name}</td>
             <td>${appointment.email}</td>
             <td>${appointment.phone}</td>
