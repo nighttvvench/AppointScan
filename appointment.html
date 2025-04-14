@@ -75,6 +75,42 @@
         .btn-primary {
             background-color: #0d6efd;
             border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #0b5ed7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        /* Loading spinner */
+        .spinner-border {
+            display: none;
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-right: 0.5rem;
+        }
+
+        /* Disabled button state */
+        .btn-primary:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Validation error styling */
+        .is-invalid {
+            border-color: #dc3545 !important;
+        }
+        .invalid-feedback {
+            color: #dc3545;
+            display: none;
+            margin-top: 0.25rem;
+            font-size: 0.875em;
         }
     </style>
 </head>
@@ -100,22 +136,27 @@
                                     <label for="student-number" class="form-label">Student Number *</label>
                                     <input type="text" class="form-control" id="student-number" name="student-number" 
                                            required placeholder="e.g., 2023-12345">
+                                    <div class="invalid-feedback">Please enter a valid student number</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="fullname" class="form-label">Full Name *</label>
                                     <input type="text" class="form-control" id="fullname" name="fullname" required placeholder="Enter your full name">
+                                    <div class="invalid-feedback">Please enter your full name</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email *</label>
                                     <input type="email" class="form-control" id="email" name="email" required placeholder="your.email@example.com">
+                                    <div class="invalid-feedback">Please enter a valid email address</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="contact-number" class="form-label">Contact Number *</label>
                                     <input type="tel" class="form-control" id="contact-number" name="contact-number" required placeholder="e.g., +1234567890">
+                                    <div class="invalid-feedback">Please enter a valid contact number</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="preferred-date" class="form-label">Preferred Date *</label>
                                     <input type="date" class="form-control" id="preferred-date" name="preferred-date" required min="">
+                                    <div class="invalid-feedback">Please select a valid date</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="preferred-time" class="form-label">Preferred Time *</label>
@@ -129,6 +170,7 @@
                                         <option value="15:00">3:00 PM</option>
                                         <option value="16:00">4:00 PM</option>
                                     </select>
+                                    <div class="invalid-feedback">Please select a time slot</div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="checkup-type" class="form-label">Checkup Type *</label>
@@ -140,8 +182,10 @@
                                         <option value="eye">Vision Test</option>
                                         <option value="vaccination">Vaccination</option>
                                     </select>
+                                    <div class="invalid-feedback">Please select a checkup type</div>
                                 </div>
-                                <button type="submit" class="btn btn-primary w-100 btn-lg py-3">
+                                <button type="submit" class="btn btn-primary w-100 btn-lg py-3" id="submit-btn">
+                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     <i class="bi bi-calendar-check me-2"></i> Book Appointment
                                 </button>
                             </form>
@@ -172,47 +216,109 @@
             const dd = String(today.getDate()).padStart(2, '0');
             const formattedDate = `${yyyy}-${mm}-${dd}`;
             document.getElementById('preferred-date').min = formattedDate;
+            
+            // Add basic validation for all required fields
+            const form = document.getElementById('appointment-form');
+            const requiredFields = form.querySelectorAll('[required]');
+            
+            requiredFields.forEach(field => {
+                field.addEventListener('input', function() {
+                    if (this.checkValidity()) {
+                        this.classList.remove('is-invalid');
+                        this.nextElementSibling.style.display = 'none';
+                    }
+                });
+            });
         });
         
-        // Form submission
-        document.getElementById('appointment-form').addEventListener('submit', function(e) {
+        // Form submission with validation and loading state
+        document.getElementById('appointment-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Get form values
-            const studentNumber = document.getElementById('student-number').value;
-            const fullname = document.getElementById('fullname').value;
-            const email = document.getElementById('email').value;
-            const contact = document.getElementById('contact-number').value;
-            const date = document.getElementById('preferred-date').value;
-            const time = document.getElementById('preferred-time').value;
-            const checkupTypeElement = document.getElementById('checkup-type');
-            const checkupType = checkupTypeElement.options[checkupTypeElement.selectedIndex].text;
-            const notes = document.getElementById('notes').value;
+            const form = this;
+            const submitBtn = document.getElementById('submit-btn');
+            const spinner = submitBtn.querySelector('.spinner-border');
+            const icon = submitBtn.querySelector('.bi');
             
-            // Create appointment object
-            const appointment = {
-                id: Date.now(),
-                studentNumber,
-                fullname,
-                email,
-                contact,
-                date,
-                time,
-                checkupType,
-                notes,
-                timestamp: new Date().toISOString()
-            };
+            // Validate all fields
+            let isValid = true;
+            const requiredFields = form.querySelectorAll('[required]');
             
-            // Save to localStorage array
-            let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
-            appointments.push(appointment);
-            localStorage.setItem('appointments', JSON.stringify(appointments));
+            requiredFields.forEach(field => {
+                if (!field.checkValidity()) {
+                    field.classList.add('is-invalid');
+                    field.nextElementSibling.style.display = 'block';
+                    isValid = false;
+                }
+            });
             
-            // Also store individually for confirmation page
-            localStorage.setItem('currentAppointment', JSON.stringify(appointment));
+            if (!isValid) {
+                return;
+            }
             
-            // Redirect to confirmation page
-            window.location.href = "confirm.html";
+            // Show loading state
+            submitBtn.disabled = true;
+            spinner.style.display = 'inline-block';
+            icon.style.display = 'none';
+            submitBtn.innerHTML = 'Processing...';
+            
+            try {
+                // Simulate API call delay (remove in production)
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                // Get form values
+                const studentNumber = document.getElementById('student-number').value;
+                const fullname = document.getElementById('fullname').value;
+                const email = document.getElementById('email').value;
+                const contact = document.getElementById('contact-number').value;
+                const date = document.getElementById('preferred-date').value;
+                const time = document.getElementById('preferred-time').value;
+                const checkupTypeElement = document.getElementById('checkup-type');
+                const checkupType = checkupTypeElement.options[checkupTypeElement.selectedIndex].text;
+                
+                // Generate appointment ID
+                const now = new Date();
+                const appointmentId = 'APT-' + 
+                    now.getFullYear() + 
+                    String(now.getMonth() + 1).padStart(2, '0') + 
+                    String(now.getDate()).padStart(2, '0') + '-' + 
+                    Math.floor(1000 + Math.random() * 9000);
+                
+                // Create appointment object
+                const appointment = {
+                    id: appointmentId,
+                    studentNumber: studentNumber,
+                    fullname: fullname,
+                    email: email,
+                    contact: contact,
+                    date: date,
+                    time: time,
+                    checkupType: checkupType,
+                    status: 'pending',
+                    timestamp: now.toISOString()
+                };
+                
+                // Save to localStorage array
+                let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
+                appointments.push(appointment);
+                localStorage.setItem('appointments', JSON.stringify(appointments));
+                
+                // Also store individually for confirmation page
+                localStorage.setItem('currentAppointment', JSON.stringify(appointment));
+                
+                // Redirect to confirmation page
+                window.location.href = "confirm.html";
+                
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                alert('An error occurred while booking your appointment. Please try again.');
+            } finally {
+                // Reset button state (in case of error)
+                submitBtn.disabled = false;
+                spinner.style.display = 'none';
+                icon.style.display = 'inline-block';
+                submitBtn.innerHTML = '<i class="bi bi-calendar-check me-2"></i> Book Appointment';
+            }
         });
     </script>
 
