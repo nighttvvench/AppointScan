@@ -41,6 +41,15 @@
             color: #28a745;
             margin-bottom: 1rem;
         }
+        
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            background-color: #fef3c7;
+            color: #92400e;
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -65,18 +74,28 @@
                         </svg>
                     </div>
                     
-                    <h3 class="card-title text-center mb-4">Appointment Successful!</h3>
-                    <p class="text-center mb-4">Thank you for booking your appointment at  AppointScan. Your appointment has been successfully scheduled.</p>
+                    <div class="alert alert-success mb-4">
+                        <h3 class="card-title text-center mb-2">Appointment Scheduled Successfully!</h3>
+                        <p class="text-center">Your appointment has been registered in our system.</p>
+                    </div>
 
                     <!-- Appointment Details -->
                     <div class="mb-4 text-start">
                         <h5 class="text-center mb-3">Appointment Details</h5>
-                        <p><strong>Student Number:</strong> <span id="appointment-student-number"></span></p>
-                        <p><strong>Name:</strong> <span id="appointment-name"></span></p>
-                        <p><strong>Email:</strong> <span id="appointment-email"></span></p>
-                        <p><strong>Phone:</strong> <span id="appointment-phone"></span></p>
-                        <p><strong>Preferred Appointment Date:</strong> <span id="appointment-date"></span></p>
-                        <p><strong>Preferred Appointment Time:</strong> <span id="appointment-time"></span></p>
+                        <p><strong>Student Number:</strong> <span id="result-student-number"></span></p>
+                        <p><strong>Full Name:</strong> <span id="result-fullname"></span></p>
+                        <p><strong>Email:</strong> <span id="result-email"></span></p>
+                        <p><strong>Contact Number:</strong> <span id="result-contact"></span></p>
+                        <p><strong>Checkup Type:</strong> <span id="result-checkup-type"></span></p>
+                        <p><strong>Date:</strong> <span id="result-date"></span></p>
+                        <p><strong>Time:</strong> <span id="result-time"></span></p>
+                        <p><strong>Appointment ID:</strong> <span id="result-id"></span></p>
+                        <p><strong>Status:</strong> <span class="status-badge">Pending</span></p>
+                    </div>
+
+                    <div class="mb-4">
+                        <p>Please arrive 15 minutes before your scheduled appointment time.</p>
+                        <p>Remember to bring your student ID card with you.</p>
                     </div>
 
                     <!-- Back to Home Button -->
@@ -93,7 +112,7 @@
 
 <!-- Footer -->
 <footer class="bg-dark text-white text-center py-3">
-    <p>&copy; 2025  PROJECT RNATION | All Rights Reserved</p>
+    <p>&copy; 2025 PROJECT RNATION | All Rights Reserved</p>
 </footer>
 
 <!-- Bootstrap JS and dependencies -->
@@ -104,13 +123,57 @@
 
 <!-- JavaScript to display the saved appointment data -->
 <script>
-    // Retrieve the stored data from localStorage
-    document.getElementById("appointment-student-number").textContent = localStorage.getItem("appointmentStudentNumber");
-    document.getElementById("appointment-name").textContent = localStorage.getItem("appointmentName");
-    document.getElementById("appointment-email").textContent = localStorage.getItem("appointmentEmail");
-    document.getElementById("appointment-phone").textContent = localStorage.getItem("appointmentPhone");
-    document.getElementById("appointment-date").textContent = localStorage.getItem("appointmentDate");
-    document.getElementById("appointment-time").textContent = localStorage.getItem("appointmentTime");
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get the appointment data from localStorage
+        const appointmentData = JSON.parse(localStorage.getItem('currentAppointment'));
+        
+        if (!appointmentData) {
+            window.location.href = 'appointment.html';
+            return;
+        }
+        
+        // Generate a unique ID for the appointment
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        const randomNum = Math.floor(Math.random() * 999) + 1;
+        const id = `APT-${yyyy}${mm}${dd}-${String(randomNum).padStart(3, '0')}`;
+        
+        // Fill in the appointment details
+        document.getElementById('result-student-number').textContent = appointmentData.studentNumber;
+        document.getElementById('result-fullname').textContent = appointmentData.fullname;
+        document.getElementById('result-email').textContent = appointmentData.email;
+        document.getElementById('result-contact').textContent = appointmentData.contact;
+        document.getElementById('result-checkup-type').textContent = appointmentData.checkupType;
+        document.getElementById('result-date').textContent = formatDate(appointmentData.date);
+        document.getElementById('result-time').textContent = formatTime(appointmentData.time);
+        document.getElementById('result-id').textContent = id;
+        
+        // Save appointment to localStorage with appointments array
+        const storedAppointments = JSON.parse(localStorage.getItem('appointments')) || [];
+        
+        const completeAppointment = {
+            ...appointmentData,
+            id,
+            status: 'pending'
+        };
+        
+        storedAppointments.push(completeAppointment);
+        localStorage.setItem('appointments', JSON.stringify(storedAppointments));
+    });
+    
+    // Helper function to format date
+    function formatDate(dateString) {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        return new Date(dateString).toLocaleDateString(undefined, options);
+    }
+    
+    // Helper function to format time
+    function formatTime(timeString) {
+        const [hour, minute] = timeString.split(':');
+        return `${hour % 12 || 12}:${minute} ${hour < 12 ? 'AM' : 'PM'}`;
+    }
 </script>
 
 </body>
