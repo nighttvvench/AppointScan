@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Your Appointment</title>
+    <title>Book Your Health Checkup</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <style>
@@ -93,32 +93,53 @@
                 <div class="col-md-8 col-lg-6">
                     <div class="card shadow-lg border-0">
                         <div class="card-body p-5">
-                            <h3 class="card-title text-center mb-4">Book Your Appointment</h3>
+                            <h3 class="card-title text-center mb-4">Schedule Your Health Checkup</h3>
+                            <p class="text-center mb-4">Please fill out the form below to book your appointment.</p>
                             <form id="appointment-form">
                                 <div class="mb-3">
-                                    <label for="student-number" class="form-label">Student Number</label>
+                                    <label for="student-number" class="form-label">Student Number *</label>
                                     <input type="text" class="form-control" id="student-number" name="student-number" 
-                                           required pattern="[0-9]{9}" title="Please enter an 9-digit student number">
+                                           required placeholder="e.g., 2023-12345">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="name" class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <label for="fullname" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="fullname" name="fullname" required placeholder="Enter your full name">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="email" class="form-control" id="email" name="email" required>
+                                    <label for="email" class="form-label">Email *</label>
+                                    <input type="email" class="form-control" id="email" name="email" required placeholder="your.email@example.com">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="appointment-date" class="form-label">Preferred Date</label>
-                                    <input type="date" class="form-control" id="appointment-date" name="appointment-date" required min="">
+                                    <label for="contact-number" class="form-label">Contact Number *</label>
+                                    <input type="tel" class="form-control" id="contact-number" name="contact-number" required placeholder="e.g., +1234567890">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="appointment-time" class="form-label">Preferred Time</label>
-                                    <input type="time" class="form-control" id="appointment-time" name="appointment-time" required min="08:00" max="17:00">
+                                    <label for="preferred-date" class="form-label">Preferred Date *</label>
+                                    <input type="date" class="form-control" id="preferred-date" name="preferred-date" required min="">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="phone" class="form-label">Phone Number</label>
-                                    <input type="tel" class="form-control" id="phone" name="phone" required>
+                                    <label for="preferred-time" class="form-label">Preferred Time *</label>
+                                    <select class="form-control" id="preferred-time" name="preferred-time" required>
+                                        <option value="">Select a time slot</option>
+                                        <option value="09:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="13:00">1:00 PM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="checkup-type" class="form-label">Checkup Type *</label>
+                                    <select class="form-control" id="checkup-type" name="checkup-type" required>
+                                        <option value="">Select checkup type</option>
+                                        <option value="general">General Health Assessment</option>
+                                        <option value="physical">Physical Fitness Test</option>
+                                        <option value="dental">Dental Checkup</option>
+                                        <option value="eye">Vision Test</option>
+                                        <option value="vaccination">Vaccination</option>
+                                    </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary w-100 btn-lg py-3">
                                     <i class="bi bi-calendar-check me-2"></i> Book Appointment
@@ -144,32 +165,53 @@
     <!-- JavaScript -->
     <script>
         // Set minimum date to today
-        document.getElementById('appointment-date').min = new Date().toISOString().split('T')[0];
-
-        document.getElementById("appointment-form").addEventListener("submit", function(e) {
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            const formattedDate = `${yyyy}-${mm}-${dd}`;
+            document.getElementById('preferred-date').min = formattedDate;
+        });
+        
+        // Form submission
+        document.getElementById('appointment-form').addEventListener('submit', function(e) {
             e.preventDefault();
-
+            
+            // Get form values
+            const studentNumber = document.getElementById('student-number').value;
+            const fullname = document.getElementById('fullname').value;
+            const email = document.getElementById('email').value;
+            const contact = document.getElementById('contact-number').value;
+            const date = document.getElementById('preferred-date').value;
+            const time = document.getElementById('preferred-time').value;
+            const checkupTypeElement = document.getElementById('checkup-type');
+            const checkupType = checkupTypeElement.options[checkupTypeElement.selectedIndex].text;
+            const notes = document.getElementById('notes').value;
+            
+            // Create appointment object
             const appointment = {
                 id: Date.now(),
-                studentNumber: document.getElementById("student-number").value,
-                name: document.getElementById("name").value,
-                email: document.getElementById("email").value,
-                phone: document.getElementById("phone").value,
-                date: document.getElementById("appointment-date").value,
-                time: document.getElementById("appointment-time").value,
+                studentNumber,
+                fullname,
+                email,
+                contact,
+                date,
+                time,
+                checkupType,
+                notes,
                 timestamp: new Date().toISOString()
             };
-
+            
             // Save to localStorage array
             let appointments = JSON.parse(localStorage.getItem('appointments')) || [];
             appointments.push(appointment);
             localStorage.setItem('appointments', JSON.stringify(appointments));
-
+            
             // Also store individually for confirmation page
-            Object.keys(appointment).forEach(key => {
-                localStorage.setItem(`appointment${key.charAt(0).toUpperCase() + key.slice(1)}`, appointment[key]);
-            });
-
+            localStorage.setItem('currentAppointment', JSON.stringify(appointment));
+            
+            // Redirect to confirmation page
             window.location.href = "confirm.html";
         });
     </script>
