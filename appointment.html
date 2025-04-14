@@ -96,6 +96,11 @@
                             <h3 class="card-title text-center mb-4">Book Your Appointment</h3>
                             <form id="appointment-form">
                                 <div class="mb-3">
+                                    <label for="student-number" class="form-label">Student Number</label>
+                                    <input type="text" class="form-control" id="student-number" name="student-number" 
+                                           required pattern="[0-9]{8}" title="Please enter an 8-digit student number">
+                                </div>
+                                <div class="mb-3">
                                     <label for="name" class="form-label">Full Name</label>
                                     <input type="text" class="form-control" id="name" name="name" required>
                                 </div>
@@ -132,7 +137,7 @@
 
         <!-- Footer -->
         <footer class="text-white text-center py-3">
-            <p>&copy; 2025 CIT-U Appointment Site | All Rights Reserved</p>
+            <p>&copy; 2025 PROJECT RNATION | All Rights Reserved</p>
         </footer>
     </div>
 
@@ -146,6 +151,7 @@
 
             const appointment = {
                 id: Date.now(),
+                studentNumber: document.getElementById("student-number").value,
                 name: document.getElementById("name").value,
                 email: document.getElementById("email").value,
                 phone: document.getElementById("phone").value,
